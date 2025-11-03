@@ -17,7 +17,7 @@ const Login = () => {
   const doLogin = async () => {
     try {
       const res = await axios.post(
-        BASE_URL + "login",
+        BASE_URL + "/login",
         {
           emailId,
           password,
