@@ -2,8 +2,9 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import UserCard from "./UserCard";
-import { BASE_URL } from "../utils/constants";
+import { BASE_URL, TOAST_DURATION, TOAST_TYPES } from "../utils/constants";
 import { addUser } from "../utils/userSlice";
+import ToastComponent from "./ToastComponent";
 
 const EditProfile = ({ user }) => {
   const [firstName, setFirstName] = useState(user?.firstName);
@@ -37,7 +38,7 @@ const EditProfile = ({ user }) => {
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
-      }, 2000);
+      }, TOAST_DURATION);
     } catch (error) {
       console.log(error);
 
@@ -125,11 +126,10 @@ const EditProfile = ({ user }) => {
         />
       </div>
       {showToast && (
-        <div className="toast toast-top toast-center">
-          <div className="alert alert-success">
-            <span>Profile saved successfully.</span>
-          </div>
-        </div>
+        <ToastComponent
+          type={TOAST_TYPES.SUCCESS}
+          message="Profile saved successfully."
+        />
       )}
     </>
   );
