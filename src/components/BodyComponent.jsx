@@ -15,11 +15,10 @@ const BodyComponent = () => {
   const getUser = async () => {
     if (userData) return;
     try {
-      const getUserData = await axios.get(BASE_URL + "/profile/view", {
+      const profileData = await axios.get(BASE_URL + "/profile/view", {
         withCredentials: true,
       });
-
-      dispatch(addUser(getUserData));
+      dispatch(addUser(profileData?.data));
     } catch (error) {
       if (error.status === 401) {
         navigate("/login");
