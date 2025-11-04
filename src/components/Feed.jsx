@@ -28,7 +28,7 @@ const Feed = () => {
     getFeed();
   }, []);
   return (
-    feed && (
+    feed?.length > 0 && (
       <div>
         <UserCard user={feed[0]} />
       </div>

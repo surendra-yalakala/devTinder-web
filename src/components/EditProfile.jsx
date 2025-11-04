@@ -32,7 +32,6 @@ const EditProfile = ({ user }) => {
         },
         { withCredentials: true }
       );
-      console.log("save profile ", res?.data?.data);
 
       dispatch(addUser(res?.data?.data));
       setShowToast(true);
