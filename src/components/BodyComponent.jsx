@@ -1,16 +1,18 @@
 import axios from "axios";
 import Footer from "./Footer";
 import NavBar from "./NavBar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useEffect } from "react";
+import { use } from "react";
 
 const BodyComponent = () => {
   const dispatch = useDispatch();
   const userData = useSelector((store) => store.user);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const getUser = async () => {
     if (userData) return;
@@ -28,6 +30,7 @@ const BodyComponent = () => {
   };
 
   useEffect(() => {
+    if (location?.pathname === "/login") return;
     getUser();
   }, []);
 
