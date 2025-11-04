@@ -122,6 +122,7 @@ const EditProfile = ({ user }) => {
         </div>
         <UserCard
           user={{ firstName, lastName, photoUrl, age, gender, about }}
+          isFromFeed={false}
         />
       </div>
       {showToast && (

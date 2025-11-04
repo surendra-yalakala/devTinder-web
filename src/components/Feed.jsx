@@ -30,7 +30,7 @@ const Feed = () => {
   return (
     feed?.length > 0 && (
       <div>
-        <UserCard user={feed[0]} />
+        <UserCard user={feed[0]} isFromFeed={true} />
       </div>
     )
   );
