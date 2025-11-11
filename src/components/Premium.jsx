@@ -3,6 +3,20 @@ import React from "react";
 import { BASE_URL } from "../utils/constants";
 
 const Premium = () => {
+  const [isUserPremium, setIsUserPremium] = React.useState(false);
+
+  const verifyPremiumUser = async () => {
+    try {
+      const res = await axios.get(BASE_URL + "/premium/verify", {
+        withCredentials: true,
+      });
+
+      if (res.data.isPremium) {
+        setIsUserPremium(true);
+      }
+    } catch (error) {}
+  };
+
   const buyPremium = async (plan) => {
     try {
       const order = await axios.post(
@@ -35,7 +49,9 @@ const Premium = () => {
       console.log("Error premium api :: ", error);
     }
   };
-  return (
+  return isUserPremium ? (
+    "You're are already a premium user"
+  ) : (
     <div className="flex w-full flex-col lg:flex-row justify-center gap-4 p-4">
       <div className="card bg-base-300 rounded-box grid h-32 grow place-items-center">
         Silver Plan
