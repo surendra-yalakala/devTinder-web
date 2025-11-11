@@ -23,7 +23,7 @@ const Premium = () => {
   const buyPremium = async (plan) => {
     try {
       const order = await axios.post(
-        BASE_URL + "/premium/create",
+        BASE_URL + "/payment/create",
         { membershipType: plan },
         { withCredentials: true }
       );
