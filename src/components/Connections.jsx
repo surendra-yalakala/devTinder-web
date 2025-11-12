@@ -36,7 +36,7 @@ const Connections = () => {
         return (
           <div
             key={connection._id}
-            className="card m-5 p-5 shadow-md bg-base-300 flex items-center flex-row max-w-1/2 m-auto"
+            className="card p-5 shadow-md bg-base-300 flex items-center flex-row max-w-1/2 m-auto"
           >
             <div className="avatar">
               <div className="w-24 rounded-full">
