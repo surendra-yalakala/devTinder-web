@@ -32,10 +32,10 @@ const Connections = () => {
     <div>
       <h1 className=" my-10 text-3xl font-sans text-center">My Connections</h1>
       {connections.map((connection) => {
-        const { firstName, lastName, about, age, gender } = connection;
+        const { _id, firstName, lastName, about, age, gender } = connection;
         return (
           <div
-            key={connection._id}
+            key={_id}
             className="card p-5 shadow-md bg-base-300 flex items-center flex-row max-w-1/2 m-auto"
           >
             <div className="avatar">
@@ -59,7 +59,7 @@ const Connections = () => {
               <p className="font-sans text-sm mt-2">{about}</p>
             </div>
             <div>
-              <Link to={`/chat/${connection._id}`}>
+              <Link to={`/chat/${_id}`}>
                 <button className="btn btn-secondary ml-10">Chat</button>
               </Link>
             </div>

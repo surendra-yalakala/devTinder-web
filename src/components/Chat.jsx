@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -7,8 +7,29 @@ const Chat = () => {
   const [messages, setMessages] = React.useState([]);
   const [newMessage, setNewMessage] = React.useState("");
   const user = useSelector((store) => store.user);
-  const targetUserId = useParams();
+  const { targetUserId } = useParams();
   const userId = user?._id;
+
+  useEffect(() => {
+    if (!userId) {
+      return;
+    }
+    const socket = createSocketConnection();
+
+    socket.emit("joinRoom", {
+      firstName: user.firstName,
+      userId,
+      targetUserId,
+    });
+
+    socket.on("messageReceived", (message) => {
+      console.log(message);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [userId, targetUserId]);
 
   const sendMessage = () => {
     if (newMessage.trim() === "") return;
