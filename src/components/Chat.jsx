@@ -23,11 +23,7 @@ const Chat = () => {
     });
 
     socket.on("messageReceived", ({ firstName, lastName, text }) => {
-      console.log(firstName + ": " + text);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { firstName, lastName, text },
-      ]);
+      setMessages((messages) => [...messages, { firstName, lastName, text }]);
     });
 
     return () => {
