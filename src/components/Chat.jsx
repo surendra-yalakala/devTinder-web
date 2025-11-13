@@ -22,8 +22,12 @@ const Chat = () => {
       targetUserId,
     });
 
-    socket.on("messageReceived", (message) => {
-      console.log(message);
+    socket.on("messageReceived", ({ firstName, lastName, text }) => {
+      console.log(firstName + ": " + text);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { firstName, lastName, text },
+      ]);
     });
 
     return () => {
@@ -45,34 +49,35 @@ const Chat = () => {
   };
 
   return (
-    <div className="max-w-1/2 border mx-auto my-10 p-5 border-gray-300 rounded-lg min-h-[75vh] flex flex-col">
-      <div className="flex-1 overflow-auto">
-        <div className="chat chat-start">
-          <div className="w-10 h-10 rounded-full overflow-hidden">
-            <img
-              alt="Tailwind CSS chat bubble component"
-              src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
-            />
-          </div>
-        </div>
-        <div className="chat-header">
-          Surendra Yalakala
-          <time className="text-xs opacity-50">12:45</time>
-        </div>
-        <div className="chat-bubble font-sans text-sm">
-          You were the Chosen One!
-        </div>
-        <div className="chat-footer opacity-50">Delivered</div>
+    <div className="w-3/4 mx-auto border border-gray-600 m-5 h-[70vh] flex flex-col">
+      <h1 className="p-5 border-b border-gray-600">Chat</h1>
+      <div className="flex-1 overflow-scroll p-5">
+        {messages.map((msg, index) => {
+          return (
+            <div
+              key={index}
+              className={
+                "chat " +
+                (user.firstName === msg.firstName ? "chat-end" : "chat-start")
+              }
+            >
+              <div className="chat-header">
+                {`${msg.firstName}  ${msg.lastName}`}
+                <time className="text-xs opacity-50"> 2 hours ago</time>
+              </div>
+              <div className="chat-bubble">{msg.text}</div>
+              <div className="chat-footer opacity-50">Seen</div>
+            </div>
+          );
+        })}
       </div>
-      <div className="flex justify-around items-center mt-5">
+      <div className="p-5 border-t border-gray-600 flex items-center gap-2">
         <input
-          type="text"
-          placeholder="Type your message here..."
-          className="input input-bordered w-full"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button className="btn btn-success mx-2" onClick={sendMessage}>
+          className="flex-1 border border-gray-500 text-white rounded p-2"
+        ></input>
+        <button onClick={sendMessage} className="btn btn-secondary">
           Send
         </button>
       </div>
