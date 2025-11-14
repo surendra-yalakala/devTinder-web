@@ -11,7 +11,18 @@ const Chat = () => {
   const [newMessage, setNewMessage] = React.useState("");
   const user = useSelector((store) => store.user);
   const { targetUserId } = useParams();
+  const messagesEndRef = React.useRef(null);
   const userId = user?._id;
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   // fetch all chat messages between logged in user and target user
   const fetchMessages = async () => {
@@ -114,6 +125,7 @@ const Chat = () => {
             </div>
           );
         })}
+        <div ref={messagesEndRef} />
       </div>
       <div className="p-5 border-t border-gray-600 flex items-center gap-2">
         <input
