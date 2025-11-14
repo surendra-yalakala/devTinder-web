@@ -2,6 +2,9 @@ import React, { useEffect } from "react";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import { BASE_URL } from "../utils/constants";
+import axios from "axios";
+import { formatTime } from "../utils/utility";
 
 const Chat = () => {
   const [messages, setMessages] = React.useState([]);
@@ -9,6 +12,35 @@ const Chat = () => {
   const user = useSelector((store) => store.user);
   const { targetUserId } = useParams();
   const userId = user?._id;
+
+  // fetch all chat messages between logged in user and target user
+  const fetchMessages = async () => {
+    try {
+      const chatRes = await axios.get(BASE_URL + `/chat/${targetUserId}`, {
+        withCredentials: true,
+      });
+
+      console.log(chatRes.data.messages);
+
+      const chatMsgs = chatRes.data.messages.map((msg) => {
+        return {
+          firstName: msg.senderId.firstName,
+          lastName: msg.senderId.lastName,
+          text: msg.text,
+          sentAt: formatTime(msg.createdAt),
+        };
+      });
+      console.log(chatMsgs);
+
+      setMessages(chatMsgs);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
 
   useEffect(() => {
     if (!userId) {
@@ -22,8 +54,13 @@ const Chat = () => {
       targetUserId,
     });
 
-    socket.on("messageReceived", ({ firstName, lastName, text }) => {
-      setMessages((messages) => [...messages, { firstName, lastName, text }]);
+    socket.on("messageReceived", ({ firstName, lastName, text, createdAt }) => {
+      const sentAt = createdAt ? formatTime(createdAt) : formatTime(Date.now());
+
+      setMessages((messages) => [
+        ...messages,
+        { firstName, lastName, text, sentAt },
+      ]);
     });
 
     return () => {
@@ -41,6 +78,15 @@ const Chat = () => {
       targetUserId,
       text: newMessage,
     });
+    // optimistic update with sentAt
+    // const optimisticMsg = {
+    //   firstName: user?.firstName,
+    //   lastName: user?.lastName,
+    //   text: newMessage,
+    //   sentAt: formatTime(Date.now()),
+    // };
+    // setMessages((msgs) => [...msgs, optimisticMsg]);
+
     setNewMessage("");
   };
 
@@ -59,10 +105,12 @@ const Chat = () => {
             >
               <div className="chat-header">
                 {`${msg.firstName}  ${msg.lastName}`}
-                <time className="text-xs opacity-50"> 2 hours ago</time>
               </div>
               <div className="chat-bubble">{msg.text}</div>
-              <div className="chat-footer opacity-50">Seen</div>
+              <div className="chat-footer opacity-50">
+                Seen
+                <time className="text-xs opacity-50"> {msg.sentAt}</time>
+              </div>
             </div>
           );
         })}
