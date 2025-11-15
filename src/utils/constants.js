@@ -7,3 +7,5 @@ export const TOAST_TYPES = {
   ERROR: "error",
   INFO: "info",
 };
+
+export const EMAIL_RX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
