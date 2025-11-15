@@ -119,6 +119,14 @@ const Login = () => {
           >
             {isLogin ? "Don't have an account?" : "Already have an account?"}
           </p>
+          {isLogin && (
+            <p
+              className="text-center mt-4 cursor-pointer text-blue-500"
+              onClick={() => navigate("/forgot-password")}
+            >
+              Forgot Password?
+            </p>
+          )}
         </div>
       </div>
     </div>
